@@ -5,6 +5,7 @@ const App = () => {
     const [topWord, setTopWord] = useState("hold the ")
     const [bottomWord, setBottomWord] = useState("Door man")
     const [meme, setMeme] = useState("http://i.imgflip.com/1bij.jpg")
+    const [loading, setLoading] = useState(false)
 
     const divRef = useRef()
 
@@ -64,12 +65,14 @@ const App = () => {
     
 
     async function randomFetch() {
+        setLoading(true)
         const res = await fetch("https://api.imgflip.com/get_memes")
         const data = await res.json()
         const memes = data.data.memes;
         const randomIndex = Math.floor(Math.random() * memes.length);
         console.log(memes[randomIndex].url);
         setMeme(memes[randomIndex].url)
+        setLoading(false)
     }
 
 
@@ -110,9 +113,9 @@ const App = () => {
           </form>
           <button
             className="mt-8 text-white bg-gradient-to-r from-green-600 to-lime-400 hover:from-lime-400 hover:to-green-600 px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-200 transform hover:scale-105"
-            onClick={randomFetch}
+            onClick={randomFetch} disabled={loading}
           >
-            Generate New Meme
+            {loading ? "loading" : "Generate New Meme"} 
           </button>
         </div>
 
